@@ -2,19 +2,46 @@
 
 A machine learning text classification system using Logistic Regression and TF-IDF vectorization.
 
+Supports custom datasets and the arXiv scientific papers dataset.
+
 ## Project Structure
 
 ```
 text-classifier/
-├── main.py                    # Training script
+├── main.py                    # Training script (basic)
+├── train_arxiv.py             # Training script for arXiv dataset
+├── prepare_arxiv_data.py      # arXiv data preprocessing
 ├── predict.py                 # Prediction module
 ├── interface.py               # Command-line interface
 ├── web_interface.py           # Web interface (Flask)
 ├── training_data.csv          # Training dataset
 ├── requirements.txt           # Dependencies
 ├── text_classifier_model.pkl  # Trained model (generated)
-└── tfidf_vectorizer.pkl       # Fitted vectorizer (generated)
+├── tfidf_vectorizer.pkl       # Fitted vectorizer (generated)
+├── README.md                  # This file
+└── ARXIV_GUIDE.md             # arXiv dataset guide
 ```
+
+## Quick Start
+
+### For arXiv Dataset
+
+See [ARXIV_GUIDE.md](ARXIV_GUIDE.md) for detailed instructions on using the arXiv dataset.
+
+```bash
+# 1. Prepare arXiv data
+python prepare_arxiv_data.py --input /path/to/arxiv-metadata-oai-snapshot.json --balance
+
+# 2. Train model
+python train_arxiv.py --plot-cm
+
+# 3. Use the model
+python web_interface.py
+```
+
+### For Custom Dataset
+
+Continue with the instructions below.
 
 ## Installation
 
