@@ -1,161 +1,81 @@
-# 🤖 Text Classifier
+# Text Classifier
 
-A machine learning project for classifying text into categories using Logistic Regression and TF-IDF vectorization.
+A machine learning text classification system using Logistic Regression and TF-IDF vectorization.
 
-## 📋 Project Structure
+## Project Structure
 
 ```
 text-classifier/
-├── main.py                    # Training script (trains and saves the model)
-├── predict.py                 # Standalone prediction script
+├── main.py                    # Training script
+├── predict.py                 # Prediction module
 ├── interface.py               # Command-line interface
-├── web_interface.py          # Web-based interface (Flask)
-├── training_data.csv         # Your training dataset
-├── text_classifier_model.pkl # Saved trained model (generated)
-└── tfidf_vectorizer.pkl      # Saved vectorizer (generated)
+├── web_interface.py           # Web interface (Flask)
+├── training_data.csv          # Training dataset
+├── requirements.txt           # Dependencies
+├── text_classifier_model.pkl  # Trained model (generated)
+└── tfidf_vectorizer.pkl       # Fitted vectorizer (generated)
 ```
 
-## 🚀 Quick Start Guide
+## Installation
 
-### Step 1: Train and Save the Model
+### 1. Create Virtual Environment
 
-First, train your model and save it for later use:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+### Train the Model
 
 ```bash
 python main.py
 ```
 
-This will:
-- Load and preprocess your training data
-- Train a Logistic Regression classifier
-- Display accuracy and evaluation metrics
-- **Save the model** as `text_classifier_model.pkl`
-- **Save the vectorizer** as `tfidf_vectorizer.pkl`
+This will train the model and save `text_classifier_model.pkl` and `tfidf_vectorizer.pkl`.
 
-### Step 2: Use the Model with an Interface
+### Make Predictions
 
-After training, you have 3 options to use your model:
+**Option 1: Python Script**
 
-#### Option 1: Python Script (Simple)
-
-```bash
-python predict.py
-```
-
-Use this in your own code:
 ```python
 from predict import predict_category
 
-text = "Your text here"
-category, confidence = predict_category(text)
+category, confidence = predict_category("Your text here")
 print(f"Category: {category}, Confidence: {confidence:.2%}")
 ```
 
-#### Option 2: Command-Line Interface
+**Option 2: Command-Line Interface**
 
 ```bash
 python interface.py
 ```
 
-Interactive CLI where you can type text and get instant predictions.
-
-#### Option 3: Web Interface (Recommended)
+**Option 3: Web Interface**
 
 ```bash
 python web_interface.py
 ```
 
-Then open your browser to: **http://127.0.0.1:5000**
+Access at http://127.0.0.1:5000
 
-Beautiful web interface with:
-- Real-time text classification
-- Confidence scores
-- Probability visualization for all categories
+## Model Configuration
 
-## 📦 Installation
+**Algorithm:** Logistic Regression  
+**Vectorization:** TF-IDF  
+**Features:** Unigrams and bigrams, max 10,000 features  
+**Train/Test Split:** 80/20
 
-### Required Dependencies
+## API Endpoint
 
-```bash
-pip install pandas scikit-learn matplotlib seaborn joblib flask
-```
-
-Or create a `requirements.txt`:
-
-```txt
-pandas
-scikit-learn
-matplotlib
-seaborn
-joblib
-flask
-```
-
-Then install:
-```bash
-pip install -r requirements.txt
-```
-
-## 📊 Model Details
-
-- **Algorithm**: Logistic Regression
-- **Vectorization**: TF-IDF (Term Frequency-Inverse Document Frequency)
-- **Features**: 
-  - Unigrams and bigrams
-  - Max 10,000 features
-  - English stop words removed
-- **Train/Test Split**: 80/20
-
-## 🔧 Customization
-
-### Changing the Model
-
-Edit `main.py` to try different algorithms:
-
-```python
-# Current: Logistic Regression
-clf = LogisticRegression(max_iter=1000)
-
-# Try Random Forest
-from sklearn.ensemble import RandomForestClassifier
-clf = RandomForestClassifier(n_estimators=100)
-
-# Try SVM
-from sklearn.svm import SVC
-clf = SVC(kernel='linear', probability=True)
-```
-
-### Tuning TF-IDF Parameters
-
-```python
-vectorizer = TfidfVectorizer(
-    lowercase=True,
-    stop_words='english',
-    ngram_range=(1, 2),    # Change to (1, 3) for trigrams
-    max_features=10000,    # Increase for more features
-    min_df=2,              # Minimum document frequency
-    max_df=0.8             # Maximum document frequency
-)
-```
-
-## 📈 Model Evaluation
-
-After training, you'll see:
-- **Accuracy Score**: Overall correctness
-- **Classification Report**: Precision, Recall, F1-Score per category
-- **Confusion Matrix**: Visual heatmap of predictions
-
-## 💾 Saved Model Files
-
-The training process generates:
-- `text_classifier_model.pkl`: The trained classifier
-- `tfidf_vectorizer.pkl`: The fitted TF-IDF vectorizer
-
-**Both files are required** for making predictions!
-
-## 🌐 API Endpoint (Web Interface)
-
-When running `web_interface.py`, you can also use the API:
+The web interface provides a REST API:
 
 ```bash
 curl -X POST http://127.0.0.1:5000/predict \
@@ -176,40 +96,47 @@ Response:
 }
 ```
 
-## 🔍 Troubleshooting
+## Customization
 
-### Model files not found
-```
-❌ Error: Model files not found!
-```
-**Solution**: Run `python main.py` first to train and save the model.
+### Change Algorithm
 
-### Import errors
-```
-ModuleNotFoundError: No module named 'sklearn'
-```
-**Solution**: Install dependencies: `pip install scikit-learn`
+Edit `main.py`:
 
-### Port already in use (Web Interface)
-```
-Address already in use
-```
-**Solution**: Change the port in `web_interface.py`:
 ```python
-app.run(debug=True, host='0.0.0.0', port=5001)  # Change 5000 to 5001
+# Logistic Regression (default)
+clf = LogisticRegression(max_iter=1000)
+
+# Random Forest
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier(n_estimators=100)
+
+# Support Vector Machine
+from sklearn.svm import SVC
+clf = SVC(kernel='linear', probability=True)
 ```
 
-## 📝 Next Steps
+### Tune Vectorizer
 
-1. **Improve accuracy**: Try different algorithms, tune hyperparameters
-2. **Add more data**: More training data = better performance
-3. **Deploy**: Host your web interface on Heroku, AWS, or Azure
-4. **Add features**: Implement batch prediction, API authentication, etc.
+```python
+vectorizer = TfidfVectorizer(
+    ngram_range=(1, 2),    # Unigrams and bigrams
+    max_features=10000,    # Vocabulary size
+    min_df=2,              # Minimum document frequency
+    max_df=0.8             # Maximum document frequency
+)
+```
 
-## 🤝 Contributing
+## Troubleshooting
 
-Feel free to fork this project and make improvements!
+**Model files not found**  
+Run `python main.py` to train and save the model.
 
-## 📄 License
+**Import errors**  
+Ensure virtual environment is activated and dependencies are installed.
 
-MIT License - feel free to use this for your projects!
+**Port already in use**  
+Change port in `web_interface.py`: `app.run(port=5001)`
+
+## License
+
+MIT License
