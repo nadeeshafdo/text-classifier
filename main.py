@@ -5,6 +5,7 @@ Usage:
     python main.py train
     python main.py predict "your project idea text"
     python main.py predict --interactive
+    python main.py web
 """
 
 import sys
@@ -21,6 +22,8 @@ def main():
         _handle_train()
     elif command == "predict":
         _handle_predict()
+    elif command == "web":
+        web()
     else:
         print(f"Unknown command: {command}")
         _print_usage()
@@ -83,6 +86,9 @@ def _print_prediction(results: list[dict], top_n: int = 10):
     if len(results) > top_n:
         print(f"  ... and {len(results) - top_n} more domains with lower confidence")
 
+def web():
+    from src.web import app
+    app.run(debug=True, host="0.0.0.0", port=5000)
 
 def _print_usage():
     print(__doc__)
